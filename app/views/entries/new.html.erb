@@ -1,0 +1,19 @@
+<div class="full-width-forms">
+  <%= simple_form_for @entry, html: {class: 'entry__form'} do |f| %>
+    <div class="col-1-2">
+      <%= f.input :lat %>
+    </div>
+
+    <div class="col-1-2">
+      <%= f.input :lon %>
+    </div>
+
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :address %>
+
+    <div class="input">
+      <%= f.button :submit %>
+    </div>
+  <% end %>
+</div>

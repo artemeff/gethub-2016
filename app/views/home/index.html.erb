@@ -1,0 +1,59 @@
+<div id="map"></div>
+<div class="main__controls">
+  <div class="col-1-2">
+    <div class="main__logo col-1-4">
+      <img src="/assets/logo.png" />
+    </div>
+    <div class="main__type col-1-4">
+      <select id="city_chooser">
+        <option value="" selected>город</option>
+        <option value="57.6227,39.8872,12">Ярославль</option>
+      </select>
+    </div>
+    <div class="main__type col-1-4">
+      <select id="type_chooser">
+        <option value="" selected>ищем все</option>
+        <% @types.each do |type| %>
+          <option value="<%= type.id %>"><%= type.name.mb_chars.downcase %></option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+  <div class="main__nav col-1-2">
+    <% if user_signed_in? %>
+      <%= link_to current_user.name, profile_path(current_user), class: 'main__nav__link' %>
+      <%= link_to 'добавить точку', '#', id: 'add_entry', class: 'btn small round white' %>
+      <%= link_to 'выйти', destroy_user_session_path, method: :delete, class: 'btn small round white' %>
+    <% else %>
+      <%= link_to 'войти с помощью vk', user_omniauth_authorize_path(:vkontakte), class: 'btn small round white' %>
+    <% end %>
+  </div>
+</div>
+<div class="main__entry" style="display: none">
+  <div class="main__entry__close">x</div>
+  <div class="main__entry__block"></div>
+</div>
+<% if user_signed_in? %>
+  <div class="main__form">
+    <div class="main__form__close">x</div>
+
+    <div class="full-width-forms">
+      <%= simple_form_for @entry, remote: true, html: {class: 'entry__form'} do |f| %>
+        <%= f.input_field :lat, type: :hidden %>
+        <%= f.input_field :lon, type: :hidden %>
+
+        <%= f.input :name, label: 'Название' %>
+        <%= f.input :description, label: 'Описание' %>
+        <%= f.input :address, label: 'Адрес' %>
+        <%= f.input :type_id, collection: @types, label: 'Категория' %>
+
+        <div class="input">
+          <%= f.button :submit, class: 'btn solid blue' %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+<% end %>
+
+<%= javascript_include_tag 'map' %>
